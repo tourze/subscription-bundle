@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use DoctrineEnhanceBundle\Traits\SnowflakeKeyAware;
 use SubscriptionBundle\Repository\EquityRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -36,7 +35,18 @@ use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
 #[ORM\Entity(repositoryClass: EquityRepository::class)]
 class Equity implements \Stringable
 {
-    use SnowflakeKeyAware;
+    #[ListColumn(order: -1)]
+    #[ExportColumn]
+    #[Groups(['restful_read', 'api_tree', 'admin_curd', 'api_list'])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
+    private ?int $id = 0;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     #[Ignore]
     #[ORM\ManyToMany(targetEntity: Plan::class, inversedBy: 'equities', fetch: 'EXTRA_LAZY')]
