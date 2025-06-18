@@ -9,28 +9,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Creatable;
-use Tourze\EasyAdmin\Attribute\Action\Deletable;
-use Tourze\EasyAdmin\Attribute\Action\Editable;
-use Tourze\EasyAdmin\Attribute\Column\BoolColumn;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Field\FormField;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 
-#[AsPermission(title: '资源情况')]
-#[Creatable]
-#[Editable]
-#[Deletable]
 #[ORM\Table(name: 'ims_subscription_resource', options: ['comment' => '资源情况'])]
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
-class Resource
+class Resource implements \Stringable
 {
     use TimestampableAware;
-    #[ListColumn(order: -1)]
-    #[ExportColumn]
+    use BlameableAware;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
@@ -41,21 +27,12 @@ class Resource
         return $this->id;
     }
 
-    #[BoolColumn]
     #[IndexColumn]
     #[TrackColumn]
     #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '有效', 'default' => 0])]
-    #[ListColumn(order: 97)]
-    #[FormField(order: 97)]
     private ?bool $valid = false;
 
-    #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
-    private ?string $createdBy = null;
 
-    #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
-    private ?string $updatedBy = null;
 
     public function isValid(): ?bool
     {
@@ -69,30 +46,24 @@ class Resource
         return $this;
     }
 
-    #[ListColumn(title: '用户')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserInterface $user = null;
 
-    #[ListColumn(title: '订阅记录')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Record $record = null;
 
-    #[ListColumn(title: '权益名')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Equity $equity = null;
 
-    #[ListColumn(title: '生效时间')]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $startTime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutableInterface $startTime = null;
 
-    #[ListColumn(title: '过期时间')]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $endTime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutableInterface $endTime = null;
 
-    #[ListColumn]
     #[ORM\Column(type: Types::BIGINT, options: ['comment' => '剩余数量'])]
     private ?string $value = null;
 
@@ -132,24 +103,24 @@ class Resource
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): ?\DateTimeImmutableInterface
     {
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeInterface $startTime): static
+    public function setStartTime(\DateTimeImmutableInterface $startTime): static
     {
         $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeInterface
+    public function getEndTime(): ?\DateTimeImmutableInterface
     {
         return $this->endTime;
     }
 
-    public function setEndTime(?\DateTimeInterface $endTime): static
+    public function setEndTime(?\DateTimeImmutableInterface $endTime): static
     {
         $this->endTime = $endTime;
 
@@ -168,26 +139,12 @@ class Resource
         return $this;
     }
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
 
-        return $this;
+
+
+
+    public function __toString(): string
+    {
+        return sprintf('Resource[%s]', $this->id ?? 'new');
     }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }}
+}

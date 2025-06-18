@@ -10,28 +10,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Creatable;
-use Tourze\EasyAdmin\Attribute\Action\Deletable;
-use Tourze\EasyAdmin\Attribute\Action\Editable;
-use Tourze\EasyAdmin\Attribute\Column\BoolColumn;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Field\FormField;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 
-#[AsPermission(title: '订阅记录')]
-#[Creatable]
-#[Editable]
-#[Deletable]
 #[ORM\Table(name: 'ims_subscription_record', options: ['comment' => '订阅记录'])]
 #[ORM\Entity(repositoryClass: RecordRepository::class)]
-class Record
+class Record implements \Stringable
 {
     use TimestampableAware;
-    #[ListColumn(order: -1)]
-    #[ExportColumn]
+    use BlameableAware;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
@@ -42,21 +28,12 @@ class Record
         return $this->id;
     }
 
-    #[BoolColumn]
     #[IndexColumn]
     #[TrackColumn]
     #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '有效', 'default' => 0])]
-    #[ListColumn(order: 97)]
-    #[FormField(order: 97)]
     private ?bool $valid = false;
 
-    #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
-    private ?string $createdBy = null;
 
-    #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
-    private ?string $updatedBy = null;
 
     public function isValid(): ?bool
     {
@@ -75,12 +52,12 @@ class Record
     private ?Plan $plan = null;
 
     #[IndexColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['comment' => '激活时间'])]
-    private ?\DateTimeInterface $activeTime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '激活时间'])]
+    private ?\DateTimeImmutableInterface $activeTime = null;
 
     #[IndexColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['comment' => '过期时间'])]
-    private ?\DateTimeInterface $expireTime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '过期时间'])]
+    private ?\DateTimeImmutableInterface $expireTime = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -101,24 +78,24 @@ class Record
         return $this;
     }
 
-    public function getActiveTime(): ?\DateTimeInterface
+    public function getActiveTime(): ?\DateTimeImmutableInterface
     {
         return $this->activeTime;
     }
 
-    public function setActiveTime(\DateTimeInterface $activeTime): static
+    public function setActiveTime(\DateTimeImmutableInterface $activeTime): static
     {
         $this->activeTime = $activeTime;
 
         return $this;
     }
 
-    public function getExpireTime(): ?\DateTimeInterface
+    public function getExpireTime(): ?\DateTimeImmutableInterface
     {
         return $this->expireTime;
     }
 
-    public function setExpireTime(\DateTimeInterface $expireTime): static
+    public function setExpireTime(\DateTimeImmutableInterface $expireTime): static
     {
         $this->expireTime = $expireTime;
 
@@ -149,26 +126,12 @@ class Record
         return $this;
     }
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
 
-        return $this;
+
+
+
+    public function __toString(): string
+    {
+        return sprintf('Record[%s]', $this->id ?? 'new');
     }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }}
+}

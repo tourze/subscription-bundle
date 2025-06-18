@@ -7,24 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use SubscriptionBundle\Repository\UsageRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\EasyAdmin\Attribute\Action\Creatable;
-use Tourze\EasyAdmin\Attribute\Action\Deletable;
-use Tourze\EasyAdmin\Attribute\Action\Editable;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 
-#[AsPermission(title: '资源消耗')]
-#[Creatable]
-#[Editable]
-#[Deletable]
 #[ORM\Table(name: 'ims_subscription_usage', options: ['comment' => '资源消耗'])]
 #[ORM\Entity(repositoryClass: UsageRepository::class)]
-class Usage
+class Usage implements \Stringable
 {
     use TimestampableAware;
-    #[ListColumn(order: -1)]
-    #[ExportColumn]
+    use BlameableAware;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
@@ -35,30 +25,24 @@ class Usage
         return $this->id;
     }
 
-    #[ListColumn(title: '用户')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserInterface $user = null;
 
-    #[ListColumn(title: '订阅记录')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Record $record = null;
 
-    #[ListColumn(title: '权益名')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Equity $equity = null;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::DATE_MUTABLE, options: ['comment' => '日期'])]
-    private ?\DateTimeInterface $date = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, options: ['comment' => '日期'])]
+    private ?\DateTimeImmutableInterface $date = null;
 
-    #[ListColumn]
     #[ORM\Column(length: 4, options: ['comment' => '时分'])]
     private ?string $time = null;
 
-    #[ListColumn]
     #[ORM\Column(type: Types::BIGINT, options: ['comment' => '消耗数量'])]
     private ?string $value = null;
 
@@ -110,12 +94,12 @@ class Usage
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?\DateTimeImmutableInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(\DateTimeImmutableInterface $date): static
     {
         $this->date = $date;
 
@@ -132,4 +116,10 @@ class Usage
         $this->time = $time;
 
         return $this;
-    }}
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('Usage[%s]', $this->id ?? 'new');
+    }
+}

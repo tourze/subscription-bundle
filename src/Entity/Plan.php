@@ -11,28 +11,12 @@ use Symfony\Component\Serializer\Attribute\Ignore;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Creatable;
-use Tourze\EasyAdmin\Attribute\Action\Deletable;
-use Tourze\EasyAdmin\Attribute\Action\Editable;
-use Tourze\EasyAdmin\Attribute\Column\BoolColumn;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Field\FormField;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
 
-#[AsPermission(title: '订阅计划')]
-#[Creatable]
-#[Editable]
-#[Deletable]
 #[ORM\Table(name: 'ims_subscription_plan', options: ['comment' => '订阅计划'])]
 #[ORM\Entity(repositoryClass: PlanRepository::class)]
-class Plan
+class Plan implements \Stringable
 {
     use TimestampableAware;
-    #[ListColumn(order: -1)]
-    #[ExportColumn]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
@@ -43,21 +27,11 @@ class Plan
         return $this->id;
     }
 
-    #[BoolColumn]
     #[IndexColumn]
     #[TrackColumn]
     #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '有效', 'default' => 0])]
-    #[ListColumn(order: 97)]
-    #[FormField(order: 97)]
     private ?bool $valid = false;
 
-    #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
-    private ?string $updatedBy = null;
 
     public function isValid(): ?bool
     {
@@ -71,28 +45,18 @@ class Plan
         return $this;
     }
 
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(length: 64, options: ['comment' => '名称'])]
     private ?string $name = null;
 
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '描述'])]
     private ?string $description = null;
 
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(options: ['comment' => '生效天数'])]
     private int $periodDay = 30;
 
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(options: ['comment' => '可续订次数'])]
     private int $renewCount = 0;
 
-    #[ListColumn(title: '拥有权益')]
-    #[FormField(title: '拥有权益')]
     #[ORM\ManyToMany(targetEntity: Equity::class, mappedBy: 'plans', fetch: 'EXTRA_LAZY')]
     private Collection $equities;
 
@@ -211,26 +175,8 @@ class Plan
         return $this;
     }
 
-    public function setCreatedBy(?string $createdBy): self
+    public function __toString(): string
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        return sprintf('Plan[%s]', $this->name ?? 'unnamed');
     }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }}
+}
