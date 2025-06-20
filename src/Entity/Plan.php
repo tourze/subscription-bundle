@@ -11,12 +11,15 @@ use Symfony\Component\Serializer\Attribute\Ignore;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 
 #[ORM\Table(name: 'ims_subscription_plan', options: ['comment' => '订阅计划'])]
 #[ORM\Entity(repositoryClass: PlanRepository::class)]
 class Plan implements \Stringable
 {
     use TimestampableAware;
+    use BlameableAware;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]

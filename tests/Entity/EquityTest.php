@@ -26,7 +26,7 @@ class EquityTest extends TestCase
         $this->equity->setCreatedBy('admin');
         $this->equity->setUpdatedBy('admin');
 
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->equity->setCreateTime($now);
         $this->equity->setUpdateTime($now);
 
@@ -60,10 +60,10 @@ class EquityTest extends TestCase
         // 准备测试数据
         $plan = new Plan();
         $plan->setName('测试计划');
-        
+
         // 添加计划
         $result = $this->equity->addPlan($plan);
-        
+
         // 验证结果
         $this->assertSame($this->equity, $result); // 返回自身以支持链式调用
         $this->assertCount(1, $this->equity->getPlans());
@@ -75,11 +75,11 @@ class EquityTest extends TestCase
         // 准备测试数据
         $plan = new Plan();
         $plan->setName('测试计划');
-        
+
         // 添加两次相同的计划
         $this->equity->addPlan($plan);
         $this->equity->addPlan($plan);
-        
+
         // 验证结果 - 应该只添加一次
         $this->assertCount(1, $this->equity->getPlans());
     }
@@ -90,10 +90,10 @@ class EquityTest extends TestCase
         $plan = new Plan();
         $plan->setName('测试计划');
         $this->equity->addPlan($plan);
-        
+
         // 移除计划
         $result = $this->equity->removePlan($plan);
-        
+
         // 验证结果
         $this->assertSame($this->equity, $result); // 返回自身以支持链式调用
         $this->assertCount(0, $this->equity->getPlans());
@@ -105,10 +105,10 @@ class EquityTest extends TestCase
         // 准备测试数据
         $plan = new Plan();
         $plan->setName('测试计划');
-        
+
         // 移除未添加的计划
         $result = $this->equity->removePlan($plan);
-        
+
         // 验证结果 - 不应抛出异常，而是静默失败
         $this->assertSame($this->equity, $result);
         $this->assertCount(0, $this->equity->getPlans());
@@ -121,9 +121,9 @@ class EquityTest extends TestCase
         $idProperty = $reflectionClass->getProperty('id');
         $idProperty->setAccessible(true);
         $idProperty->setValue($this->equity, 1);
-        
+
         $this->equity->setName('测试权益');
-        
+
         // 测试__toString方法
         $this->assertEquals('测试权益', (string)$this->equity);
     }
@@ -131,8 +131,8 @@ class EquityTest extends TestCase
     public function testToString_withoutId(): void
     {
         $this->equity->setName('测试权益');
-        
+
         // ID为0时应返回空字符串
         $this->assertEquals('', (string)$this->equity);
     }
-} 
+}

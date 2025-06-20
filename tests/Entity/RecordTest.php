@@ -25,9 +25,9 @@ class RecordTest extends TestCase
         $plan->setName('测试计划');
         
         // 设置基本属性
-        $activeTime = new \DateTime('2023-01-01');
-        $expireTime = new \DateTime('2023-12-31');
-        $now = new \DateTime();
+        $activeTime = new \DateTimeImmutable('2023-01-01');
+        $expireTime = new \DateTimeImmutable('2023-12-31');
+        $now = new \DateTimeImmutable();
         
         $this->record->setPlan($plan);
         $this->record->setUser($user);

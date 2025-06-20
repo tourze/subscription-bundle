@@ -38,7 +38,7 @@ class Usage implements \Stringable
     private ?Equity $equity = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, options: ['comment' => '日期'])]
-    private ?\DateTimeImmutableInterface $date = null;
+    private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(length: 4, options: ['comment' => '时分'])]
     private ?string $time = null;
@@ -94,12 +94,12 @@ class Usage implements \Stringable
         return $this;
     }
 
-    public function getDate(): ?\DateTimeImmutableInterface
+    public function getDate(): ?\DateTimeImmutable
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeImmutableInterface $date): static
+    public function setDate(\DateTimeImmutable $date): static
     {
         $this->date = $date;
 

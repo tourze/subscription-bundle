@@ -53,11 +53,11 @@ class Record implements \Stringable
 
     #[IndexColumn]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '激活时间'])]
-    private ?\DateTimeImmutableInterface $activeTime = null;
+    private ?\DateTimeImmutable $activeTime = null;
 
     #[IndexColumn]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '过期时间'])]
-    private ?\DateTimeImmutableInterface $expireTime = null;
+    private ?\DateTimeImmutable $expireTime = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -78,24 +78,24 @@ class Record implements \Stringable
         return $this;
     }
 
-    public function getActiveTime(): ?\DateTimeImmutableInterface
+    public function getActiveTime(): ?\DateTimeImmutable
     {
         return $this->activeTime;
     }
 
-    public function setActiveTime(\DateTimeImmutableInterface $activeTime): static
+    public function setActiveTime(\DateTimeImmutable $activeTime): static
     {
         $this->activeTime = $activeTime;
 
         return $this;
     }
 
-    public function getExpireTime(): ?\DateTimeImmutableInterface
+    public function getExpireTime(): ?\DateTimeImmutable
     {
         return $this->expireTime;
     }
 
-    public function setExpireTime(\DateTimeImmutableInterface $expireTime): static
+    public function setExpireTime(\DateTimeImmutable $expireTime): static
     {
         $this->expireTime = $expireTime;
 

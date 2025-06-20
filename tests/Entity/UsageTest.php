@@ -24,12 +24,12 @@ class UsageTest extends TestCase
         $record = new Record();
         $equity = new Equity();
         $equity->setName('测试权益');
-        
+
         // 设置基本属性
-        $date = new \DateTime('2023-05-01');
+        $date = new \DateTimeImmutable('2023-05-01');
         $time = '1430'; // 14:30
-        $now = new \DateTime();
-        
+        $now = new \DateTimeImmutable();
+
         $this->usage->setUser($user);
         $this->usage->setRecord($record);
         $this->usage->setEquity($equity);
@@ -38,7 +38,7 @@ class UsageTest extends TestCase
         $this->usage->setValue('10');
         $this->usage->setCreateTime($now);
         $this->usage->setUpdateTime($now);
-        
+
         // 验证结果
         $this->assertSame($user, $this->usage->getUser());
         $this->assertSame($record, $this->usage->getRecord());
@@ -68,10 +68,10 @@ class UsageTest extends TestCase
     {
         // 创建模拟对象
         $user = $this->createMock(UserInterface::class);
-        
+
         // 设置用户
         $result = $this->usage->setUser($user);
-        
+
         // 验证结果
         $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
         $this->assertSame($user, $this->usage->getUser());
@@ -81,10 +81,10 @@ class UsageTest extends TestCase
     {
         // 创建记录对象
         $record = new Record();
-        
+
         // 设置记录
         $result = $this->usage->setRecord($record);
-        
+
         // 验证结果
         $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
         $this->assertSame($record, $this->usage->getRecord());
@@ -95,10 +95,10 @@ class UsageTest extends TestCase
         // 创建权益对象
         $equity = new Equity();
         $equity->setName('测试权益');
-        
+
         // 设置权益
         $result = $this->usage->setEquity($equity);
-        
+
         // 验证结果
         $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
         $this->assertSame($equity, $this->usage->getEquity());
@@ -108,7 +108,7 @@ class UsageTest extends TestCase
     {
         // 设置值
         $result = $this->usage->setValue('100');
-        
+
         // 验证结果
         $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
         $this->assertSame('100', $this->usage->getValue());
@@ -118,10 +118,10 @@ class UsageTest extends TestCase
     {
         // 创建日期对象
         $date = new \DateTime('2023-05-01');
-        
+
         // 设置日期
         $result = $this->usage->setDate($date);
-        
+
         // 验证结果
         $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
         $this->assertSame($date, $this->usage->getDate());
@@ -131,9 +131,9 @@ class UsageTest extends TestCase
     {
         // 设置时间
         $result = $this->usage->setTime('1430');
-        
+
         // 验证结果
         $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
         $this->assertSame('1430', $this->usage->getTime());
     }
-} 
+}

@@ -59,10 +59,10 @@ class Resource implements \Stringable
     private ?Equity $equity = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private ?\DateTimeImmutableInterface $startTime = null;
+    private ?\DateTimeImmutable $startTime = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutableInterface $endTime = null;
+    private ?\DateTimeImmutable $endTime = null;
 
     #[ORM\Column(type: Types::BIGINT, options: ['comment' => '剩余数量'])]
     private ?string $value = null;
@@ -103,24 +103,24 @@ class Resource implements \Stringable
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeImmutableInterface
+    public function getStartTime(): ?\DateTimeImmutable
     {
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeImmutableInterface $startTime): static
+    public function setStartTime(\DateTimeImmutable $startTime): static
     {
         $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeImmutableInterface
+    public function getEndTime(): ?\DateTimeImmutable
     {
         return $this->endTime;
     }
 
-    public function setEndTime(?\DateTimeImmutableInterface $endTime): static
+    public function setEndTime(?\DateTimeImmutable $endTime): static
     {
         $this->endTime = $endTime;
 

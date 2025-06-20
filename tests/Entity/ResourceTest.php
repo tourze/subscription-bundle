@@ -24,12 +24,12 @@ class ResourceTest extends TestCase
         $record = new Record();
         $equity = new Equity();
         $equity->setName('测试权益');
-        
+
         // 设置基本属性
-        $startTime = new \DateTime('2023-01-01');
-        $endTime = new \DateTime('2023-12-31');
-        $now = new \DateTime();
-        
+        $startTime = new \DateTimeImmutable('2023-01-01');
+        $endTime = new \DateTimeImmutable('2023-12-31');
+        $now = new \DateTimeImmutable();
+
         $this->resource->setUser($user);
         $this->resource->setRecord($record);
         $this->resource->setEquity($equity);
@@ -41,7 +41,7 @@ class ResourceTest extends TestCase
         $this->resource->setUpdatedBy('admin');
         $this->resource->setCreateTime($now);
         $this->resource->setUpdateTime($now);
-        
+
         // 验证结果
         $this->assertSame($user, $this->resource->getUser());
         $this->assertSame($record, $this->resource->getRecord());
@@ -77,10 +77,10 @@ class ResourceTest extends TestCase
     {
         // 创建模拟对象
         $user = $this->createMock(UserInterface::class);
-        
+
         // 设置用户
         $result = $this->resource->setUser($user);
-        
+
         // 验证结果
         $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
         $this->assertSame($user, $this->resource->getUser());
@@ -90,10 +90,10 @@ class ResourceTest extends TestCase
     {
         // 创建记录对象
         $record = new Record();
-        
+
         // 设置记录
         $result = $this->resource->setRecord($record);
-        
+
         // 验证结果
         $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
         $this->assertSame($record, $this->resource->getRecord());
@@ -104,10 +104,10 @@ class ResourceTest extends TestCase
         // 创建权益对象
         $equity = new Equity();
         $equity->setName('测试权益');
-        
+
         // 设置权益
         $result = $this->resource->setEquity($equity);
-        
+
         // 验证结果
         $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
         $this->assertSame($equity, $this->resource->getEquity());
@@ -117,7 +117,7 @@ class ResourceTest extends TestCase
     {
         // 设置值
         $result = $this->resource->setValue('100');
-        
+
         // 验证结果
         $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
         $this->assertSame('100', $this->resource->getValue());
@@ -127,10 +127,10 @@ class ResourceTest extends TestCase
     {
         // 创建时间对象
         $time = new \DateTime('2023-01-01');
-        
+
         // 设置开始时间
         $result = $this->resource->setStartTime($time);
-        
+
         // 验证结果
         $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
         $this->assertSame($time, $this->resource->getStartTime());
@@ -140,10 +140,10 @@ class ResourceTest extends TestCase
     {
         // 创建时间对象
         $time = new \DateTime('2023-12-31');
-        
+
         // 设置结束时间
         $result = $this->resource->setEndTime($time);
-        
+
         // 验证结果
         $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
         $this->assertSame($time, $this->resource->getEndTime());
@@ -153,7 +153,7 @@ class ResourceTest extends TestCase
     {
         // 设置结束时间为null
         $result = $this->resource->setEndTime(null);
-        
+
         // 验证结果
         $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
         $this->assertNull($this->resource->getEndTime());
@@ -164,13 +164,13 @@ class ResourceTest extends TestCase
         // 测试设置有效
         $this->resource->setValid(true);
         $this->assertTrue($this->resource->isValid());
-        
+
         // 测试设置无效
         $this->resource->setValid(false);
         $this->assertFalse($this->resource->isValid());
-        
+
         // 测试设置为null
         $this->resource->setValid(null);
         $this->assertNull($this->resource->isValid());
     }
-} 
+}

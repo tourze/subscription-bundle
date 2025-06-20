@@ -28,7 +28,7 @@ class PlanTest extends TestCase
         $this->plan->setCreatedBy('admin');
         $this->plan->setUpdatedBy('admin');
 
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->plan->setCreateTime($now);
         $this->plan->setUpdateTime($now);
 
