@@ -58,10 +58,10 @@ class Resource implements \Stringable
     #[ORM\JoinColumn(nullable: false)]
     private ?Equity $equity = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '开始时间'])]
     private ?\DateTimeImmutable $startTime = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true, options: ['comment' => '结束时间'])]
     private ?\DateTimeImmutable $endTime = null;
 
     #[ORM\Column(type: Types::BIGINT, options: ['comment' => '剩余数量'])]

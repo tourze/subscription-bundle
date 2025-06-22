@@ -126,7 +126,7 @@ class ResourceTest extends TestCase
     public function testSetStartTime_withDateTimeObject(): void
     {
         // 创建时间对象
-        $time = new \DateTime('2023-01-01');
+        $time = new \DateTimeImmutable('2023-01-01');
 
         // 设置开始时间
         $result = $this->resource->setStartTime($time);
@@ -139,7 +139,7 @@ class ResourceTest extends TestCase
     public function testSetEndTime_withDateTimeObject(): void
     {
         // 创建时间对象
-        $time = new \DateTime('2023-12-31');
+        $time = new \DateTimeImmutable('2023-12-31');
 
         // 设置结束时间
         $result = $this->resource->setEndTime($time);

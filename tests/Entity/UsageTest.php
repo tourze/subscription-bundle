@@ -117,7 +117,7 @@ class UsageTest extends TestCase
     public function testSetDate_withDateTimeObject(): void
     {
         // 创建日期对象
-        $date = new \DateTime('2023-05-01');
+        $date = new \DateTimeImmutable('2023-05-01');
 
         // 设置日期
         $result = $this->usage->setDate($date);

@@ -132,7 +132,7 @@ class EquityTest extends TestCase
     {
         $this->equity->setName('测试权益');
 
-        // ID为0时应返回空字符串
-        $this->assertEquals('', (string)$this->equity);
+        // ID为0时应返回'new Equity'
+        $this->assertEquals('new Equity', (string)$this->equity);
     }
 }

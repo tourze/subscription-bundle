@@ -38,10 +38,10 @@ class Equity implements \Stringable
     private string $name;
 
     #[ORM\Column(length: 20, options: ['comment' => '类型'])]
-    private ?string $type;
+    private string $type;
 
     #[ORM\Column(type: Types::BIGINT, options: ['comment' => '数值'])]
-    private ?string $value = '0';
+    private string $value = '0';
 
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '描述'])]
     private ?string $description = null;
@@ -101,7 +101,7 @@ class Equity implements \Stringable
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -113,7 +113,7 @@ class Equity implements \Stringable
         return $this;
     }
 
-    public function getValue(): ?string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -127,7 +127,7 @@ class Equity implements \Stringable
 
     public function __toString(): string
     {
-        if (!$this->getId()) {
+        if ($this->getId() === null || $this->getId() === 0) {
             return 'new Equity';
         }
 

@@ -63,7 +63,7 @@ class Record implements \Stringable
     #[ORM\JoinColumn(nullable: false)]
     private ?UserInterface $user = null;
 
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(length: 20, nullable: true, options: ['comment' => '订阅状态'])]
     private ?SubscribeStatus $status = null;
 
     public function getPlan(): ?Plan
