@@ -1,6 +1,6 @@
 <?php
 
-namespace SubscriptionBundle\DependencyInjection;
+namespace Tourze\SubscriptionBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

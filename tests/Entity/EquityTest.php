@@ -1,11 +1,11 @@
 <?php
 
-namespace SubscriptionBundle\Tests\Entity;
+namespace Tourze\SubscriptionBundle\Tests\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
-use SubscriptionBundle\Entity\Equity;
-use SubscriptionBundle\Entity\Plan;
+use Tourze\SubscriptionBundle\Entity\Equity;
+use Tourze\SubscriptionBundle\Entity\Plan;
 
 class EquityTest extends TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace SubscriptionBundle\Tests\DependencyInjection;
+namespace Tourze\SubscriptionBundle\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
-use SubscriptionBundle\DependencyInjection\SubscriptionExtension;
+use Tourze\SubscriptionBundle\DependencyInjection\SubscriptionExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SubscriptionExtensionTest extends TestCase
@@ -23,10 +23,10 @@ class SubscriptionExtensionTest extends TestCase
         $this->extension->load([], $this->container);
         
         // 验证服务是否已注册
-        $this->assertTrue($this->container->has('SubscriptionBundle\Repository\PlanRepository'));
-        $this->assertTrue($this->container->has('SubscriptionBundle\Repository\EquityRepository'));
-        $this->assertTrue($this->container->has('SubscriptionBundle\Repository\RecordRepository'));
-        $this->assertTrue($this->container->has('SubscriptionBundle\Repository\ResourceRepository'));
-        $this->assertTrue($this->container->has('SubscriptionBundle\Repository\UsageRepository'));
+        $this->assertTrue($this->container->has('Tourze\SubscriptionBundle\Repository\PlanRepository'));
+        $this->assertTrue($this->container->has('Tourze\SubscriptionBundle\Repository\EquityRepository'));
+        $this->assertTrue($this->container->has('Tourze\SubscriptionBundle\Repository\RecordRepository'));
+        $this->assertTrue($this->container->has('Tourze\SubscriptionBundle\Repository\ResourceRepository'));
+        $this->assertTrue($this->container->has('Tourze\SubscriptionBundle\Repository\UsageRepository'));
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace SubscriptionBundle\Tests;
+namespace Tourze\SubscriptionBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
-use SubscriptionBundle\SubscriptionBundle;
+use Tourze\SubscriptionBundle\SubscriptionBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class SubscriptionBundleTest extends TestCase

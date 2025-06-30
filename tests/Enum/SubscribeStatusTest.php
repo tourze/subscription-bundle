@@ -1,9 +1,9 @@
 <?php
 
-namespace SubscriptionBundle\Tests\Enum;
+namespace Tourze\SubscriptionBundle\Tests\Enum;
 
 use PHPUnit\Framework\TestCase;
-use SubscriptionBundle\Enum\SubscribeStatus;
+use Tourze\SubscriptionBundle\Enum\SubscribeStatus;
 
 class SubscribeStatusTest extends TestCase
 {

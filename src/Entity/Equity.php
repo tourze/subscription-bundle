@@ -1,12 +1,12 @@
 <?php
 
-namespace SubscriptionBundle\Entity;
+namespace Tourze\SubscriptionBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use SubscriptionBundle\Repository\EquityRepository;
+use Tourze\SubscriptionBundle\Repository\EquityRepository;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;

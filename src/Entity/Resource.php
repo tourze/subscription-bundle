@@ -1,10 +1,10 @@
 <?php
 
-namespace SubscriptionBundle\Entity;
+namespace Tourze\SubscriptionBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use SubscriptionBundle\Repository\ResourceRepository;
+use Tourze\SubscriptionBundle\Repository\ResourceRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;

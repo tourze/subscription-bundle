@@ -1,11 +1,11 @@
 <?php
 
-namespace SubscriptionBundle\Entity;
+namespace Tourze\SubscriptionBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use SubscriptionBundle\Enum\SubscribeStatus;
-use SubscriptionBundle\Repository\RecordRepository;
+use Tourze\SubscriptionBundle\Enum\SubscribeStatus;
+use Tourze\SubscriptionBundle\Repository\RecordRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;

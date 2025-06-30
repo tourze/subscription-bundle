@@ -30,12 +30,12 @@
   },
   "autoload": {
     "psr-4": {
-      "SubscriptionBundle\\": "src"
+      "Tourze\\SubscriptionBundle\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "SubscriptionBundle\\Tests\\": "tests"
+      "Tourze\\SubscriptionBundle\\Tests\\": "tests"
     }
   }
 }

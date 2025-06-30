@@ -5,12 +5,12 @@ namespace Tourze\SubscriptionBundle\Tests\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
-use Tourze\SubscriptionBundle\Entity\Plan;
-use Tourze\SubscriptionBundle\Repository\PlanRepository;
+use Tourze\SubscriptionBundle\Entity\Resource;
+use Tourze\SubscriptionBundle\Repository\ResourceRepository;
 
-class PlanRepositoryTest extends TestCase
+class ResourceRepositoryTest extends TestCase
 {
-    private PlanRepository $repository;
+    private ResourceRepository $repository;
     private $managerRegistry;
     private $entityManager;
 
@@ -22,17 +22,17 @@ class PlanRepositoryTest extends TestCase
         
         // 配置模拟对象行为，不强制调用次数
         $this->managerRegistry->method('getManagerForClass')
-            ->with(Plan::class)
+            ->with(Resource::class)
             ->willReturn($this->entityManager);
         
         // 创建实际的Repository实例
-        $this->repository = new PlanRepository($this->managerRegistry);
+        $this->repository = new ResourceRepository($this->managerRegistry);
     }
     
     public function testConstructor_withValidRegistry(): void
     {
         // 仅测试构造函数是否正确执行
-        $this->assertInstanceOf(PlanRepository::class, $this->repository);
+        $this->assertInstanceOf(ResourceRepository::class, $this->repository);
     }
     
     /**

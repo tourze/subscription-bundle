@@ -1,11 +1,11 @@
 <?php
 
-namespace SubscriptionBundle\Tests\Entity;
+namespace Tourze\SubscriptionBundle\Tests\Entity;
 
 use PHPUnit\Framework\TestCase;
-use SubscriptionBundle\Entity\Plan;
-use SubscriptionBundle\Entity\Record;
-use SubscriptionBundle\Enum\SubscribeStatus;
+use Tourze\SubscriptionBundle\Entity\Plan;
+use Tourze\SubscriptionBundle\Entity\Record;
+use Tourze\SubscriptionBundle\Enum\SubscribeStatus;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class RecordTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace SubscriptionBundle;
+namespace Tourze\SubscriptionBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace SubscriptionBundle\Repository;
+namespace Tourze\SubscriptionBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use SubscriptionBundle\Entity\Plan;
+use Tourze\SubscriptionBundle\Entity\Plan;
 
 /**
  * @method Plan|null find($id, $lockMode = null, $lockVersion = null)

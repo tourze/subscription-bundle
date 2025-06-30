@@ -1,11 +1,11 @@
 <?php
 
-namespace SubscriptionBundle\Tests\Entity;
+namespace Tourze\SubscriptionBundle\Tests\Entity;
 
 use PHPUnit\Framework\TestCase;
-use SubscriptionBundle\Entity\Equity;
-use SubscriptionBundle\Entity\Record;
-use SubscriptionBundle\Entity\Resource;
+use Tourze\SubscriptionBundle\Entity\Equity;
+use Tourze\SubscriptionBundle\Entity\Record;
+use Tourze\SubscriptionBundle\Entity\Resource;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class ResourceTest extends TestCase
