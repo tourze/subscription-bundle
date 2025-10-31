@@ -4,18 +4,33 @@ namespace Tourze\SubscriptionBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Tourze\PHPUnitSymfonyKernelTest\Attribute\AsRepository;
 use Tourze\SubscriptionBundle\Entity\Plan;
 
 /**
- * @method Plan|null find($id, $lockMode = null, $lockVersion = null)
- * @method Plan|null findOneBy(array $criteria, array $orderBy = null)
- * @method Plan[] findAll()
- * @method Plan[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Plan>
  */
+#[AsRepository(entityClass: Plan::class)]
 class PlanRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Plan::class);
+    }
+
+    public function save(Plan $entity, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($entity);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Plan $entity, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($entity);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 }

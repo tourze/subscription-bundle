@@ -3,142 +3,137 @@
 namespace Tourze\SubscriptionBundle\Tests\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use Tourze\SubscriptionBundle\Entity\Equity;
 use Tourze\SubscriptionBundle\Entity\Plan;
 use Tourze\SubscriptionBundle\Entity\Record;
 
-class PlanTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Plan::class)]
+final class PlanTest extends AbstractEntityTestCase
 {
-    private Plan $plan;
-
-    protected function setUp(): void
+    protected function createEntity(): object
     {
-        $this->plan = new Plan();
+        return new Plan();
     }
 
-    public function testGettersAndSetters_withValidData(): void
+    /**
+     * 提供属性及其样本值的 Data Provider.
+     *
+     * @return iterable<string, array{string, mixed}>
+     */
+    public static function propertiesProvider(): iterable
     {
-        // 测试基本属性
-        $this->plan->setName('测试计划');
-        $this->plan->setDescription('这是一个测试计划');
-        $this->plan->setPeriodDay(30);
-        $this->plan->setRenewCount(3);
-        $this->plan->setValid(true);
-        $this->plan->setCreatedBy('admin');
-        $this->plan->setUpdatedBy('admin');
-
-        $now = new \DateTimeImmutable();
-        $this->plan->setCreateTime($now);
-        $this->plan->setUpdateTime($now);
-
-        // 验证结果
-        $this->assertSame('测试计划', $this->plan->getName());
-        $this->assertSame('这是一个测试计划', $this->plan->getDescription());
-        $this->assertSame(30, $this->plan->getPeriodDay());
-        $this->assertSame(3, $this->plan->getRenewCount());
-        $this->assertTrue($this->plan->isValid());
-        $this->assertSame('admin', $this->plan->getCreatedBy());
-        $this->assertSame('admin', $this->plan->getUpdatedBy());
-        $this->assertSame($now, $this->plan->getCreateTime());
-        $this->assertSame($now, $this->plan->getUpdateTime());
+        yield 'valid' => ['valid', true];
+        yield 'name' => ['name', '测试计划'];
+        yield 'description' => ['description', '这是一个测试计划'];
+        yield 'periodDay' => ['periodDay', 30];
+        yield 'renewCount' => ['renewCount', 5];
     }
 
-    public function testCreation_withDefaultValues(): void
+    public function testCreationWithDefaultValues(): void
     {
         // 测试默认值
-        $this->assertSame(0, $this->plan->getId());
-        $this->assertFalse($this->plan->isValid());
-        $this->assertNull($this->plan->getName());
-        $this->assertNull($this->plan->getDescription());
-        $this->assertSame(30, $this->plan->getPeriodDay());
-        $this->assertSame(0, $this->plan->getRenewCount());
-        $this->assertNull($this->plan->getCreatedBy());
-        $this->assertNull($this->plan->getUpdatedBy());
-        $this->assertNull($this->plan->getCreateTime());
-        $this->assertNull($this->plan->getUpdateTime());
-        $this->assertInstanceOf(ArrayCollection::class, $this->plan->getEquities());
-        $this->assertCount(0, $this->plan->getEquities());
-        $this->assertInstanceOf(ArrayCollection::class, $this->plan->getRecords());
-        $this->assertCount(0, $this->plan->getRecords());
+        $plan = new Plan();
+        $this->assertSame(0, $plan->getId());
+        $this->assertFalse($plan->isValid());
+        $this->assertNull($plan->getName());
+        $this->assertNull($plan->getDescription());
+        $this->assertSame(30, $plan->getPeriodDay());
+        $this->assertSame(0, $plan->getRenewCount());
+        $this->assertNull($plan->getCreatedBy());
+        $this->assertNull($plan->getUpdatedBy());
+        $this->assertNull($plan->getCreateTime());
+        $this->assertNull($plan->getUpdateTime());
+        $this->assertInstanceOf(ArrayCollection::class, $plan->getEquities());
+        $this->assertCount(0, $plan->getEquities());
+        $this->assertInstanceOf(ArrayCollection::class, $plan->getRecords());
+        $this->assertCount(0, $plan->getRecords());
     }
 
-    public function testAddEquity_withValidEquity(): void
+    public function testAddEquityWithValidEquity(): void
     {
         $equity = new Equity();
         $equity->setName('测试权益');
-        
+
+        $plan = new Plan();
         // 添加权益
-        $result = $this->plan->addEquity($equity);
-        
+        $plan->addEquity($equity);
+
         // 验证结果
-        $this->assertSame($this->plan, $result); // 返回自身以支持链式调用
-        $this->assertCount(1, $this->plan->getEquities());
-        $this->assertTrue($this->plan->getEquities()->contains($equity));
+        $this->assertCount(1, $plan->getEquities());
+        $this->assertTrue($plan->getEquities()->contains($equity));
     }
 
-    public function testRemoveEquity_withExistingEquity(): void
+    public function testRemoveEquityWithExistingEquity(): void
     {
         // 准备测试数据
         $equity = new Equity();
         $equity->setName('测试权益');
-        $this->plan->addEquity($equity);
-        
+        $plan = new Plan();
+        $plan->addEquity($equity);
+
         // 移除权益
-        $result = $this->plan->removeEquity($equity);
-        
+        $plan->removeEquity($equity);
+
         // 验证结果
-        $this->assertSame($this->plan, $result); // 返回自身以支持链式调用
-        $this->assertCount(0, $this->plan->getEquities());
-        $this->assertFalse($this->plan->getEquities()->contains($equity));
+        $this->assertCount(0, $plan->getEquities());
+        $this->assertFalse($plan->getEquities()->contains($equity));
     }
 
-    public function testAddRecord_withValidRecord(): void
+    public function testAddRecordWithValidRecord(): void
     {
         // 准备测试数据
         $record = new Record();
-        
+
+        $plan = new Plan();
         // 添加记录
-        $result = $this->plan->addRecord($record);
-        
+        $plan->addRecord($record);
+
         // 验证结果
-        $this->assertSame($this->plan, $result); // 返回自身以支持链式调用
-        $this->assertCount(1, $this->plan->getRecords());
-        $this->assertTrue($this->plan->getRecords()->contains($record));
-        $this->assertSame($this->plan, $record->getPlan()); // 验证双向关系
+        $this->assertCount(1, $plan->getRecords());
+        $this->assertTrue($plan->getRecords()->contains($record));
+        $this->assertSame($plan, $record->getPlan()); // 验证双向关系
     }
 
-    public function testRemoveRecord_withExistingRecord(): void
+    public function testRemoveRecordWithExistingRecord(): void
     {
         // 准备测试数据
         $record = new Record();
-        $this->plan->addRecord($record);
-        
+        $plan = new Plan();
+        $plan->addRecord($record);
+
         // 移除记录
-        $result = $this->plan->removeRecord($record);
-        
+        $plan->removeRecord($record);
+
         // 验证结果
-        $this->assertSame($this->plan, $result); // 返回自身以支持链式调用
-        $this->assertCount(0, $this->plan->getRecords());
-        $this->assertFalse($this->plan->getRecords()->contains($record));
+        $this->assertCount(0, $plan->getRecords());
+        $this->assertFalse($plan->getRecords()->contains($record));
         $this->assertNull($record->getPlan()); // 验证双向关系移除
     }
 
-    public function testIsValid_withTrueValue(): void
+    public function testIsValidWithTrueValue(): void
     {
-        $this->plan->setValid(true);
-        $this->assertTrue($this->plan->isValid());
+        $plan = new Plan();
+        $plan->setValid(true);
+        $this->assertTrue($plan->isValid());
     }
 
-    public function testIsValid_withFalseValue(): void
+    public function testIsValidWithFalseValue(): void
     {
-        $this->plan->setValid(false);
-        $this->assertFalse($this->plan->isValid());
+        $plan = new Plan();
+        $plan->setValid(false);
+        $this->assertFalse($plan->isValid());
     }
 
-    public function testIsValid_withNullValue(): void
+    public function testIsValidWithNullValue(): void
     {
-        $this->plan->setValid(null);
-        $this->assertNull($this->plan->isValid());
+        $plan = new Plan();
+        $plan->setValid(null);
+        $this->assertNull($plan->isValid());
     }
-} 
+}

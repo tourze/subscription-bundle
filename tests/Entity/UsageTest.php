@@ -2,138 +2,122 @@
 
 namespace Tourze\SubscriptionBundle\Tests\Entity;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use Tourze\SubscriptionBundle\Entity\Equity;
 use Tourze\SubscriptionBundle\Entity\Record;
 use Tourze\SubscriptionBundle\Entity\Usage;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class UsageTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Usage::class)]
+final class UsageTest extends AbstractEntityTestCase
 {
-    private Usage $usage;
-
-    protected function setUp(): void
+    protected function createEntity(): object
     {
-        $this->usage = new Usage();
+        return new Usage();
     }
 
-    public function testGettersAndSetters_withValidData(): void
+    /**
+     * 提供属性及其样本值的 Data Provider.
+     *
+     * @return iterable<string, array{string, mixed}>
+     */
+    public static function propertiesProvider(): iterable
     {
-        // 创建模拟对象
-        $user = $this->createMock(UserInterface::class);
-        $record = new Record();
-        $equity = new Equity();
-        $equity->setName('测试权益');
-
-        // 设置基本属性
-        $date = new \DateTimeImmutable('2023-05-01');
-        $time = '1430'; // 14:30
-        $now = new \DateTimeImmutable();
-
-        $this->usage->setUser($user);
-        $this->usage->setRecord($record);
-        $this->usage->setEquity($equity);
-        $this->usage->setDate($date);
-        $this->usage->setTime($time);
-        $this->usage->setValue('10');
-        $this->usage->setCreateTime($now);
-        $this->usage->setUpdateTime($now);
-
-        // 验证结果
-        $this->assertSame($user, $this->usage->getUser());
-        $this->assertSame($record, $this->usage->getRecord());
-        $this->assertSame($equity, $this->usage->getEquity());
-        $this->assertSame($date, $this->usage->getDate());
-        $this->assertSame($time, $this->usage->getTime());
-        $this->assertSame('10', $this->usage->getValue());
-        $this->assertSame($now, $this->usage->getCreateTime());
-        $this->assertSame($now, $this->usage->getUpdateTime());
+        yield 'date' => ['date', new \DateTimeImmutable('2023-05-01')];
+        yield 'time' => ['time', '1430'];
+        yield 'value' => ['value', '50'];
     }
 
-    public function testCreation_withDefaultValues(): void
+    public function testCreationWithDefaultValues(): void
     {
         // 测试默认值
-        $this->assertSame(0, $this->usage->getId());
-        $this->assertNull($this->usage->getUser());
-        $this->assertNull($this->usage->getRecord());
-        $this->assertNull($this->usage->getEquity());
-        $this->assertNull($this->usage->getDate());
-        $this->assertNull($this->usage->getTime());
-        $this->assertNull($this->usage->getValue());
-        $this->assertNull($this->usage->getCreateTime());
-        $this->assertNull($this->usage->getUpdateTime());
+        $usage = new Usage();
+        $this->assertSame(0, $usage->getId());
+        $this->assertNull($usage->getUser());
+        $this->assertNull($usage->getRecord());
+        $this->assertNull($usage->getEquity());
+        $this->assertNull($usage->getDate());
+        $this->assertNull($usage->getTime());
+        $this->assertNull($usage->getValue());
+        $this->assertNull($usage->getCreateTime());
+        $this->assertNull($usage->getUpdateTime());
     }
 
-    public function testSetUser_withUserObject(): void
+    public function testSetUserWithUserObject(): void
     {
         // 创建模拟对象
         $user = $this->createMock(UserInterface::class);
 
+        $usage = new Usage();
         // 设置用户
-        $result = $this->usage->setUser($user);
+        $usage->setUser($user);
 
         // 验证结果
-        $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
-        $this->assertSame($user, $this->usage->getUser());
+        $this->assertSame($user, $usage->getUser());
     }
 
-    public function testSetRecord_withRecordObject(): void
+    public function testSetRecordWithRecordObject(): void
     {
         // 创建记录对象
         $record = new Record();
 
+        $usage = new Usage();
         // 设置记录
-        $result = $this->usage->setRecord($record);
+        $usage->setRecord($record);
 
         // 验证结果
-        $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
-        $this->assertSame($record, $this->usage->getRecord());
+        $this->assertSame($record, $usage->getRecord());
     }
 
-    public function testSetEquity_withEquityObject(): void
+    public function testSetEquityWithEquityObject(): void
     {
         // 创建权益对象
         $equity = new Equity();
         $equity->setName('测试权益');
 
+        $usage = new Usage();
         // 设置权益
-        $result = $this->usage->setEquity($equity);
+        $usage->setEquity($equity);
 
         // 验证结果
-        $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
-        $this->assertSame($equity, $this->usage->getEquity());
+        $this->assertSame($equity, $usage->getEquity());
     }
 
-    public function testSetValue_withValidString(): void
+    public function testSetValueWithValidString(): void
     {
+        $usage = new Usage();
         // 设置值
-        $result = $this->usage->setValue('100');
+        $usage->setValue('100');
 
         // 验证结果
-        $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
-        $this->assertSame('100', $this->usage->getValue());
+        $this->assertSame('100', $usage->getValue());
     }
 
-    public function testSetDate_withDateTimeObject(): void
+    public function testSetDateWithDateTimeObject(): void
     {
         // 创建日期对象
         $date = new \DateTimeImmutable('2023-05-01');
 
+        $usage = new Usage();
         // 设置日期
-        $result = $this->usage->setDate($date);
+        $usage->setDate($date);
 
         // 验证结果
-        $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
-        $this->assertSame($date, $this->usage->getDate());
+        $this->assertSame($date, $usage->getDate());
     }
 
-    public function testSetTime_withValidTimeString(): void
+    public function testSetTimeWithValidTimeString(): void
     {
+        $usage = new Usage();
         // 设置时间
-        $result = $this->usage->setTime('1430');
+        $usage->setTime('1430');
 
         // 验证结果
-        $this->assertSame($this->usage, $result); // 返回自身以支持链式调用
-        $this->assertSame('1430', $this->usage->getTime());
+        $this->assertSame('1430', $usage->getTime());
     }
 }

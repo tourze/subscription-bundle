@@ -2,60 +2,99 @@
 
 namespace Tourze\SubscriptionBundle\Tests\Enum;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 use Tourze\SubscriptionBundle\Enum\SubscribeStatus;
 
-class SubscribeStatusTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(SubscribeStatus::class)]
+final class SubscribeStatusTest extends AbstractEnumTestCase
 {
-    public function testCases_withAllEnums(): void
+    public function testCasesWithAllEnums(): void
     {
-        // 测试所有枚举值
-        $this->assertSame('active', SubscribeStatus::ACTIVE->value);
-        $this->assertSame('expiry', SubscribeStatus::EXPIRED->value);
-        
         // 测试枚举数量
         $cases = SubscribeStatus::cases();
         $this->assertCount(2, $cases);
         $this->assertContains(SubscribeStatus::ACTIVE, $cases);
         $this->assertContains(SubscribeStatus::EXPIRED, $cases);
     }
-    
-    public function testGetLabel_withActiveStatus(): void
+
+    #[TestWith([SubscribeStatus::ACTIVE, 'active', '活跃'])]
+    #[TestWith([SubscribeStatus::EXPIRED, 'expiry', '过期'])]
+    public function testValueAndLabel(SubscribeStatus $enum, string $expectedValue, string $expectedLabel): void
     {
-        // 测试活跃状态的标签
-        $this->assertSame('活跃', SubscribeStatus::ACTIVE->getLabel());
+        $this->assertSame($expectedValue, $enum->value);
+        $this->assertSame($expectedLabel, $enum->getLabel());
     }
-    
-    public function testGetLabel_withExpiredStatus(): void
+
+    #[TestWith([SubscribeStatus::ACTIVE, 'success'])]
+    #[TestWith([SubscribeStatus::EXPIRED, 'danger'])]
+    public function testGetBadge(SubscribeStatus $enum, string $expectedBadge): void
     {
-        // 测试过期状态的标签
-        $this->assertSame('过期', SubscribeStatus::EXPIRED->getLabel());
+        $this->assertSame($expectedBadge, $enum->getBadge());
     }
-    
-    public function testFromString_withValidValues(): void
+
+    public function testValueUniqueness(): void
     {
-        // 测试从字符串创建枚举
-        $this->assertSame(SubscribeStatus::ACTIVE, SubscribeStatus::from('active'));
-        $this->assertSame(SubscribeStatus::EXPIRED, SubscribeStatus::from('expiry'));
+        $values = [];
+        foreach (SubscribeStatus::cases() as $case) {
+            $this->assertNotContains($case->value, $values, "Value '{$case->value}' is not unique");
+            $values[] = $case->value;
+        }
     }
-    
-    public function testFromString_withInvalidValues(): void
+
+    public function testLabelUniqueness(): void
     {
-        // 测试从无效字符串创建枚举时的异常
+        $labels = [];
+        foreach (SubscribeStatus::cases() as $case) {
+            $label = $case->getLabel();
+            $this->assertNotContains($label, $labels, "Label '{$label}' is not unique");
+            $labels[] = $label;
+        }
+    }
+
+    #[TestWith(['active', SubscribeStatus::ACTIVE])]
+    #[TestWith(['expiry', SubscribeStatus::EXPIRED])]
+    public function testFromWithValidValues(string $value, SubscribeStatus $expected): void
+    {
+        $this->assertSame($expected, SubscribeStatus::from($value));
+    }
+
+    #[TestWith(['invalid'])]
+    #[TestWith([''])]
+    #[TestWith(['null'])]
+    public function testFromWithInvalidValues(string $invalidValue): void
+    {
         $this->expectException(\ValueError::class);
-        SubscribeStatus::from('invalid');
+        SubscribeStatus::from($invalidValue);
     }
-    
-    public function testTryFromString_withValidValues(): void
+
+    #[TestWith(['active', SubscribeStatus::ACTIVE])]
+    #[TestWith(['expiry', SubscribeStatus::EXPIRED])]
+    public function testTryFromWithValidValues(string $value, SubscribeStatus $expected): void
     {
-        // 测试尝试从字符串创建枚举
-        $this->assertSame(SubscribeStatus::ACTIVE, SubscribeStatus::tryFrom('active'));
-        $this->assertSame(SubscribeStatus::EXPIRED, SubscribeStatus::tryFrom('expiry'));
+        $this->assertSame($expected, SubscribeStatus::tryFrom($value));
     }
-    
-    public function testTryFromString_withInvalidValues(): void
+
+    public function testToArray(): void
     {
-        // 测试尝试从无效字符串创建枚举
-        $this->assertNull(SubscribeStatus::tryFrom('invalid'));
+        // 测试 ACTIVE 枚举转数组
+        $activeArray = SubscribeStatus::ACTIVE->toArray();
+        $expectedActive = [
+            'value' => 'active',
+            'label' => '活跃',
+        ];
+        $this->assertSame($expectedActive, $activeArray);
+
+        // 测试 EXPIRED 枚举转数组
+        $expiredArray = SubscribeStatus::EXPIRED->toArray();
+        $expectedExpired = [
+            'value' => 'expiry',
+            'label' => '过期',
+        ];
+        $this->assertSame($expectedExpired, $expiredArray);
     }
-} 
+}

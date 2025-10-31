@@ -2,175 +2,155 @@
 
 namespace Tourze\SubscriptionBundle\Tests\Entity;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use Tourze\SubscriptionBundle\Entity\Equity;
 use Tourze\SubscriptionBundle\Entity\Record;
 use Tourze\SubscriptionBundle\Entity\Resource;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class ResourceTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Resource::class)]
+final class ResourceTest extends AbstractEntityTestCase
 {
-    private Resource $resource;
-
-    protected function setUp(): void
+    protected function createEntity(): object
     {
-        $this->resource = new Resource();
+        return new Resource();
     }
 
-    public function testGettersAndSetters_withValidData(): void
+    /**
+     * 提供属性及其样本值的 Data Provider.
+     *
+     * @return iterable<string, array{string, mixed}>
+     */
+    public static function propertiesProvider(): iterable
     {
-        // 创建模拟对象
-        $user = $this->createMock(UserInterface::class);
-        $record = new Record();
-        $equity = new Equity();
-        $equity->setName('测试权益');
-
-        // 设置基本属性
-        $startTime = new \DateTimeImmutable('2023-01-01');
-        $endTime = new \DateTimeImmutable('2023-12-31');
-        $now = new \DateTimeImmutable();
-
-        $this->resource->setUser($user);
-        $this->resource->setRecord($record);
-        $this->resource->setEquity($equity);
-        $this->resource->setStartTime($startTime);
-        $this->resource->setEndTime($endTime);
-        $this->resource->setValue('1000');
-        $this->resource->setValid(true);
-        $this->resource->setCreatedBy('admin');
-        $this->resource->setUpdatedBy('admin');
-        $this->resource->setCreateTime($now);
-        $this->resource->setUpdateTime($now);
-
-        // 验证结果
-        $this->assertSame($user, $this->resource->getUser());
-        $this->assertSame($record, $this->resource->getRecord());
-        $this->assertSame($equity, $this->resource->getEquity());
-        $this->assertSame($startTime, $this->resource->getStartTime());
-        $this->assertSame($endTime, $this->resource->getEndTime());
-        $this->assertSame('1000', $this->resource->getValue());
-        $this->assertTrue($this->resource->isValid());
-        $this->assertSame('admin', $this->resource->getCreatedBy());
-        $this->assertSame('admin', $this->resource->getUpdatedBy());
-        $this->assertSame($now, $this->resource->getCreateTime());
-        $this->assertSame($now, $this->resource->getUpdateTime());
+        yield 'valid' => ['valid', true];
+        yield 'startTime' => ['startTime', new \DateTimeImmutable('2023-01-01')];
+        yield 'endTime' => ['endTime', new \DateTimeImmutable('2023-12-31')];
+        yield 'value' => ['value', '100'];
     }
 
-    public function testCreation_withDefaultValues(): void
+    public function testCreationWithDefaultValues(): void
     {
         // 测试默认值
-        $this->assertSame(0, $this->resource->getId());
-        $this->assertFalse($this->resource->isValid());
-        $this->assertNull($this->resource->getUser());
-        $this->assertNull($this->resource->getRecord());
-        $this->assertNull($this->resource->getEquity());
-        $this->assertNull($this->resource->getStartTime());
-        $this->assertNull($this->resource->getEndTime());
-        $this->assertNull($this->resource->getValue());
-        $this->assertNull($this->resource->getCreatedBy());
-        $this->assertNull($this->resource->getUpdatedBy());
-        $this->assertNull($this->resource->getCreateTime());
-        $this->assertNull($this->resource->getUpdateTime());
+        $resource = new Resource();
+        $this->assertSame(0, $resource->getId());
+        $this->assertFalse($resource->isValid());
+        $this->assertNull($resource->getUser());
+        $this->assertNull($resource->getRecord());
+        $this->assertNull($resource->getEquity());
+        $this->assertNull($resource->getStartTime());
+        $this->assertNull($resource->getEndTime());
+        $this->assertNull($resource->getValue());
+        $this->assertNull($resource->getCreatedBy());
+        $this->assertNull($resource->getUpdatedBy());
+        $this->assertNull($resource->getCreateTime());
+        $this->assertNull($resource->getUpdateTime());
     }
 
-    public function testSetUser_withUserObject(): void
+    public function testSetUserWithUserObject(): void
     {
         // 创建模拟对象
         $user = $this->createMock(UserInterface::class);
 
+        $resource = new Resource();
         // 设置用户
-        $result = $this->resource->setUser($user);
+        $resource->setUser($user);
 
         // 验证结果
-        $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
-        $this->assertSame($user, $this->resource->getUser());
+        $this->assertSame($user, $resource->getUser());
     }
 
-    public function testSetRecord_withRecordObject(): void
+    public function testSetRecordWithRecordObject(): void
     {
         // 创建记录对象
         $record = new Record();
 
+        $resource = new Resource();
         // 设置记录
-        $result = $this->resource->setRecord($record);
+        $resource->setRecord($record);
 
         // 验证结果
-        $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
-        $this->assertSame($record, $this->resource->getRecord());
+        $this->assertSame($record, $resource->getRecord());
     }
 
-    public function testSetEquity_withEquityObject(): void
+    public function testSetEquityWithEquityObject(): void
     {
         // 创建权益对象
         $equity = new Equity();
         $equity->setName('测试权益');
 
+        $resource = new Resource();
         // 设置权益
-        $result = $this->resource->setEquity($equity);
+        $resource->setEquity($equity);
 
         // 验证结果
-        $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
-        $this->assertSame($equity, $this->resource->getEquity());
+        $this->assertSame($equity, $resource->getEquity());
     }
 
-    public function testSetValue_withValidString(): void
+    public function testSetValueWithValidString(): void
     {
+        $resource = new Resource();
         // 设置值
-        $result = $this->resource->setValue('100');
+        $resource->setValue('100');
 
         // 验证结果
-        $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
-        $this->assertSame('100', $this->resource->getValue());
+        $this->assertSame('100', $resource->getValue());
     }
 
-    public function testSetStartTime_withDateTimeObject(): void
+    public function testSetStartTimeWithDateTimeObject(): void
     {
         // 创建时间对象
         $time = new \DateTimeImmutable('2023-01-01');
 
+        $resource = new Resource();
         // 设置开始时间
-        $result = $this->resource->setStartTime($time);
+        $resource->setStartTime($time);
 
         // 验证结果
-        $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
-        $this->assertSame($time, $this->resource->getStartTime());
+        $this->assertSame($time, $resource->getStartTime());
     }
 
-    public function testSetEndTime_withDateTimeObject(): void
+    public function testSetEndTimeWithDateTimeObject(): void
     {
         // 创建时间对象
         $time = new \DateTimeImmutable('2023-12-31');
 
+        $resource = new Resource();
         // 设置结束时间
-        $result = $this->resource->setEndTime($time);
+        $resource->setEndTime($time);
 
         // 验证结果
-        $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
-        $this->assertSame($time, $this->resource->getEndTime());
+        $this->assertSame($time, $resource->getEndTime());
     }
 
-    public function testSetEndTime_withNull(): void
+    public function testSetEndTimeWithNull(): void
     {
+        $resource = new Resource();
         // 设置结束时间为null
-        $result = $this->resource->setEndTime(null);
+        $resource->setEndTime(null);
 
         // 验证结果
-        $this->assertSame($this->resource, $result); // 返回自身以支持链式调用
-        $this->assertNull($this->resource->getEndTime());
+        $this->assertNull($resource->getEndTime());
     }
 
-    public function testIsValid_withDifferentValues(): void
+    public function testIsValidWithDifferentValues(): void
     {
+        $resource = new Resource();
         // 测试设置有效
-        $this->resource->setValid(true);
-        $this->assertTrue($this->resource->isValid());
+        $resource->setValid(true);
+        $this->assertTrue($resource->isValid());
 
         // 测试设置无效
-        $this->resource->setValid(false);
-        $this->assertFalse($this->resource->isValid());
+        $resource->setValid(false);
+        $this->assertFalse($resource->isValid());
 
         // 测试设置为null
-        $this->resource->setValid(null);
-        $this->assertNull($this->resource->isValid());
+        $resource->setValid(null);
+        $this->assertNull($resource->isValid());
     }
 }

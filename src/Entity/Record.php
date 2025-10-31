@@ -4,13 +4,14 @@ namespace Tourze\SubscriptionBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Tourze\SubscriptionBundle\Enum\SubscribeStatus;
-use Tourze\SubscriptionBundle\Repository\RecordRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
+use Tourze\SubscriptionBundle\Enum\SubscribeStatus;
+use Tourze\SubscriptionBundle\Repository\RecordRepository;
 
 #[ORM\Table(name: 'ims_subscription_record', options: ['comment' => '订阅记录'])]
 #[ORM\Entity(repositoryClass: RecordRepository::class)]
@@ -18,12 +19,13 @@ class Record implements \Stringable
 {
     use TimestampableAware;
     use BlameableAware;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
-    private ?int $id = 0;
+    private int $id = 0;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -31,20 +33,22 @@ class Record implements \Stringable
     #[IndexColumn]
     #[TrackColumn]
     #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '有效', 'default' => 0])]
+    #[Assert\Type(type: 'bool')]
     private ?bool $valid = false;
-
-
 
     public function isValid(): ?bool
     {
         return $this->valid;
     }
 
-    public function setValid(?bool $valid): self
+    public function getValid(): ?bool
+    {
+        return $this->valid;
+    }
+
+    public function setValid(?bool $valid): void
     {
         $this->valid = $valid;
-
-        return $this;
     }
 
     #[ORM\ManyToOne(inversedBy: 'records')]
@@ -53,17 +57,21 @@ class Record implements \Stringable
 
     #[IndexColumn]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '激活时间'])]
+    #[Assert\NotNull]
     private ?\DateTimeImmutable $activeTime = null;
 
     #[IndexColumn]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '过期时间'])]
+    #[Assert\NotNull]
     private ?\DateTimeImmutable $expireTime = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: UserInterface::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserInterface $user = null;
 
-    #[ORM\Column(length: 20, nullable: true, options: ['comment' => '订阅状态'])]
+    #[ORM\Column(type: Types::STRING, length: 20, nullable: true, enumType: SubscribeStatus::class, options: ['comment' => '订阅状态'])]
+    #[Assert\NotNull]
+    #[Assert\Choice(callback: [SubscribeStatus::class, 'cases'])]
     private ?SubscribeStatus $status = null;
 
     public function getPlan(): ?Plan
@@ -71,11 +79,9 @@ class Record implements \Stringable
         return $this->plan;
     }
 
-    public function setPlan(?Plan $plan): static
+    public function setPlan(?Plan $plan): void
     {
         $this->plan = $plan;
-
-        return $this;
     }
 
     public function getActiveTime(): ?\DateTimeImmutable
@@ -83,11 +89,9 @@ class Record implements \Stringable
         return $this->activeTime;
     }
 
-    public function setActiveTime(\DateTimeImmutable $activeTime): static
+    public function setActiveTime(\DateTimeImmutable $activeTime): void
     {
         $this->activeTime = $activeTime;
-
-        return $this;
     }
 
     public function getExpireTime(): ?\DateTimeImmutable
@@ -95,11 +99,9 @@ class Record implements \Stringable
         return $this->expireTime;
     }
 
-    public function setExpireTime(\DateTimeImmutable $expireTime): static
+    public function setExpireTime(\DateTimeImmutable $expireTime): void
     {
         $this->expireTime = $expireTime;
-
-        return $this;
     }
 
     public function getUser(): ?UserInterface
@@ -107,11 +109,9 @@ class Record implements \Stringable
         return $this->user;
     }
 
-    public function setUser(?UserInterface $user): static
+    public function setUser(?UserInterface $user): void
     {
         $this->user = $user;
-
-        return $this;
     }
 
     public function getStatus(): ?SubscribeStatus
@@ -119,19 +119,13 @@ class Record implements \Stringable
         return $this->status;
     }
 
-    public function setStatus(?SubscribeStatus $status): static
+    public function setStatus(?SubscribeStatus $status): void
     {
         $this->status = $status;
-
-        return $this;
     }
-
-
-
-
 
     public function __toString(): string
     {
-        return sprintf('Record[%s]', $this->id ?? 'new');
+        return sprintf('Record[%s]', 0 === $this->id ? 'new' : $this->id);
     }
 }

@@ -6,10 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Tourze\SubscriptionBundle\Repository\EquityRepository;
 use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
+use Tourze\SubscriptionBundle\Repository\EquityRepository;
 
 /**
  * 权益应该是一些可以消耗的资源，例如抽奖次数/流量
@@ -20,33 +21,40 @@ class Equity implements \Stringable
 {
     use TimestampableAware;
     use BlameableAware;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
-    private ?int $id = 0;
+    private int $id = 0;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
+    /** @var Collection<int, Plan> */
     #[Ignore]
-    #[ORM\ManyToMany(targetEntity: Plan::class, inversedBy: 'equities', fetch: 'EXTRA_LAZY')]
+    #[ORM\ManyToMany(targetEntity: Plan::class, mappedBy: 'equities', fetch: 'EXTRA_LAZY')]
     private Collection $plans;
 
     #[ORM\Column(length: 120, options: ['comment' => '名称'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 120)]
     private string $name;
 
     #[ORM\Column(length: 20, options: ['comment' => '类型'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 20)]
     private string $type;
 
     #[ORM\Column(type: Types::BIGINT, options: ['comment' => '数值'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 20)]
     private string $value = '0';
 
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '描述'])]
+    #[Assert\Length(max: 65535)]
     private ?string $description = null;
-
-
 
     public function __construct()
     {
@@ -82,11 +90,9 @@ class Equity implements \Stringable
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getDescription(): ?string
@@ -94,11 +100,9 @@ class Equity implements \Stringable
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
     public function getType(): string
@@ -106,11 +110,9 @@ class Equity implements \Stringable
         return $this->type;
     }
 
-    public function setType(string $type): static
+    public function setType(string $type): void
     {
         $this->type = $type;
-
-        return $this;
     }
 
     public function getValue(): string
@@ -118,16 +120,14 @@ class Equity implements \Stringable
         return $this->value;
     }
 
-    public function setValue(string $value): static
+    public function setValue(string $value): void
     {
         $this->value = $value;
-
-        return $this;
     }
 
     public function __toString(): string
     {
-        if ($this->getId() === null || $this->getId() === 0) {
+        if (0 === $this->getId()) {
             return 'new Equity';
         }
 

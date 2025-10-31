@@ -2,124 +2,108 @@
 
 namespace Tourze\SubscriptionBundle\Tests\Entity;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use Tourze\SubscriptionBundle\Entity\Plan;
 use Tourze\SubscriptionBundle\Entity\Record;
 use Tourze\SubscriptionBundle\Enum\SubscribeStatus;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class RecordTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Record::class)]
+final class RecordTest extends AbstractEntityTestCase
 {
-    private Record $record;
-
-    protected function setUp(): void
+    protected function createEntity(): object
     {
-        $this->record = new Record();
+        return new Record();
     }
 
-    public function testGettersAndSetters_withValidData(): void
+    /**
+     * 提供属性及其样本值的 Data Provider.
+     *
+     * @return iterable<string, array{string, mixed}>
+     */
+    public static function propertiesProvider(): iterable
     {
-        // 创建模拟对象
-        $user = $this->createMock(UserInterface::class);
-        $plan = new Plan();
-        $plan->setName('测试计划');
-        
-        // 设置基本属性
-        $activeTime = new \DateTimeImmutable('2023-01-01');
-        $expireTime = new \DateTimeImmutable('2023-12-31');
-        $now = new \DateTimeImmutable();
-        
-        $this->record->setPlan($plan);
-        $this->record->setUser($user);
-        $this->record->setActiveTime($activeTime);
-        $this->record->setExpireTime($expireTime);
-        $this->record->setStatus(SubscribeStatus::ACTIVE);
-        $this->record->setValid(true);
-        $this->record->setCreatedBy('admin');
-        $this->record->setUpdatedBy('admin');
-        $this->record->setCreateTime($now);
-        $this->record->setUpdateTime($now);
-        
-        // 验证结果
-        $this->assertSame($plan, $this->record->getPlan());
-        $this->assertSame($user, $this->record->getUser());
-        $this->assertSame($activeTime, $this->record->getActiveTime());
-        $this->assertSame($expireTime, $this->record->getExpireTime());
-        $this->assertSame(SubscribeStatus::ACTIVE, $this->record->getStatus());
-        $this->assertTrue($this->record->isValid());
-        $this->assertSame('admin', $this->record->getCreatedBy());
-        $this->assertSame('admin', $this->record->getUpdatedBy());
-        $this->assertSame($now, $this->record->getCreateTime());
-        $this->assertSame($now, $this->record->getUpdateTime());
+        yield 'valid' => ['valid', true];
+        yield 'activeTime' => ['activeTime', new \DateTimeImmutable('2023-01-01')];
+        yield 'expireTime' => ['expireTime', new \DateTimeImmutable('2023-12-31')];
+        yield 'status' => ['status', SubscribeStatus::ACTIVE];
     }
 
-    public function testCreation_withDefaultValues(): void
+    public function testCreationWithDefaultValues(): void
     {
         // 测试默认值
-        $this->assertSame(0, $this->record->getId());
-        $this->assertFalse($this->record->isValid());
-        $this->assertNull($this->record->getPlan());
-        $this->assertNull($this->record->getUser());
-        $this->assertNull($this->record->getActiveTime());
-        $this->assertNull($this->record->getExpireTime());
-        $this->assertNull($this->record->getStatus());
-        $this->assertNull($this->record->getCreatedBy());
-        $this->assertNull($this->record->getUpdatedBy());
-        $this->assertNull($this->record->getCreateTime());
-        $this->assertNull($this->record->getUpdateTime());
+        $record = new Record();
+        $this->assertSame(0, $record->getId());
+        $this->assertFalse($record->isValid());
+        $this->assertNull($record->getPlan());
+        $this->assertNull($record->getUser());
+        $this->assertNull($record->getActiveTime());
+        $this->assertNull($record->getExpireTime());
+        $this->assertNull($record->getStatus());
+        $this->assertNull($record->getCreatedBy());
+        $this->assertNull($record->getUpdatedBy());
+        $this->assertNull($record->getCreateTime());
+        $this->assertNull($record->getUpdateTime());
     }
 
-    public function testSetStatus_withValidEnum(): void
+    public function testSetStatusWithValidEnum(): void
     {
+        $record = new Record();
         // 设置激活状态
-        $this->record->setStatus(SubscribeStatus::ACTIVE);
-        $this->assertSame(SubscribeStatus::ACTIVE, $this->record->getStatus());
-        
+        $record->setStatus(SubscribeStatus::ACTIVE);
+        $this->assertSame(SubscribeStatus::ACTIVE, $record->getStatus());
+
         // 设置过期状态
-        $this->record->setStatus(SubscribeStatus::EXPIRED);
-        $this->assertSame(SubscribeStatus::EXPIRED, $this->record->getStatus());
-        
+        $record->setStatus(SubscribeStatus::EXPIRED);
+        $this->assertSame(SubscribeStatus::EXPIRED, $record->getStatus());
+
         // 设置空状态
-        $this->record->setStatus(null);
-        $this->assertNull($this->record->getStatus());
+        $record->setStatus(null);
+        $this->assertNull($record->getStatus());
     }
 
-    public function testIsValid_withDifferentValues(): void
+    public function testIsValidWithDifferentValues(): void
     {
+        $record = new Record();
         // 测试设置有效
-        $this->record->setValid(true);
-        $this->assertTrue($this->record->isValid());
-        
+        $record->setValid(true);
+        $this->assertTrue($record->isValid());
+
         // 测试设置无效
-        $this->record->setValid(false);
-        $this->assertFalse($this->record->isValid());
-        
+        $record->setValid(false);
+        $this->assertFalse($record->isValid());
+
         // 测试设置为null
-        $this->record->setValid(null);
-        $this->assertNull($this->record->isValid());
+        $record->setValid(null);
+        $this->assertNull($record->isValid());
     }
 
-    public function testSetPlan_withPlanObject(): void
+    public function testSetPlanWithPlanObject(): void
     {
         // 创建计划对象
         $plan = new Plan();
         $plan->setName('测试计划');
-        
+
+        $record = new Record();
         // 设置计划
-        $result = $this->record->setPlan($plan);
-        
+        $record->setPlan($plan);
+
         // 验证结果
-        $this->assertSame($this->record, $result); // 返回自身以支持链式调用
-        $this->assertSame($plan, $this->record->getPlan());
+        $this->assertSame($plan, $record->getPlan());
     }
 
-    public function testSetPlan_withNull(): void
+    public function testSetPlanWithNull(): void
     {
+        $record = new Record();
         // 设置为null
-        $result = $this->record->setPlan(null);
-        
+        $record->setPlan(null);
+
         // 验证结果
-        $this->assertSame($this->record, $result); // 返回自身以支持链式调用
-        $this->assertNull($this->record->getPlan());
+        $this->assertNull($record->getPlan());
     }
-} 
+}

@@ -4,6 +4,15 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  # 如果确认要使用自动扫描、自动注册，建议尽可能将要扫描的目录路径收缩，不要设置那么大的范围
+  # Repository 服务（使用 #[AsRepository] 属性自动配置）
   Tourze\SubscriptionBundle\Repository\:
     resource: '../../Repository/'
+
+  # Controller 服务（EasyAdmin CRUD控制器）
+  Tourze\SubscriptionBundle\Controller\Admin\:
+    resource: '../../Controller/Admin/'
+    tags: ['controller.service_arguments']
+
+  # Service 服务（AdminMenu等）
+  Tourze\SubscriptionBundle\Service\:
+    resource: '../../Service/'
