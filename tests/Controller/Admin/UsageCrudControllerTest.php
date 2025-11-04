@@ -21,7 +21,7 @@ use Tourze\SubscriptionBundle\Entity\Usage;
 #[RunTestsInSeparateProcesses]
 final class UsageCrudControllerTest extends AbstractEasyAdminControllerTestCase
 {
-    protected function onSetUp(): void
+    protected function afterEasyAdminSetUp(): void
     {
         // Usage实体依赖User、Record、Equity等，结构复杂
         // 暂时不创建fixtures，依赖父类的通用测试逻辑
