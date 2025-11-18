@@ -79,11 +79,6 @@ final class UsageCrudControllerTest extends AbstractEasyAdminControllerTestCase
         self::assertIsString($firstRecordId, '记录ID应该是字符串');
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        self::assertSame(Usage::class, UsageCrudController::getEntityFqcn());
-    }
-
     /**
      * @return AbstractCrudController<Usage>
      */

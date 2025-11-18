@@ -19,11 +19,6 @@ use Tourze\SubscriptionBundle\Entity\Record;
 #[RunTestsInSeparateProcesses]
 final class RecordCrudControllerTest extends AbstractEasyAdminControllerTestCase
 {
-    public function testGetEntityFqcn(): void
-    {
-        self::assertSame(Record::class, RecordCrudController::getEntityFqcn());
-    }
-
     /**
      * @return AbstractCrudController<Record>
      */

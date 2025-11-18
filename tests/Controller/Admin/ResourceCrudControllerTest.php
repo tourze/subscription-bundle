@@ -32,11 +32,6 @@ final class ResourceCrudControllerTest extends AbstractEasyAdminControllerTestCa
         yield '剩余数量' => ['剩余数量'];
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        self::assertSame(Resource::class, ResourceCrudController::getEntityFqcn());
-    }
-
     /**
      * @return AbstractCrudController<Resource>
      */

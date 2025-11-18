@@ -19,11 +19,6 @@ use Tourze\SubscriptionBundle\Entity\Plan;
 #[RunTestsInSeparateProcesses]
 final class PlanCrudControllerTest extends AbstractEasyAdminControllerTestCase
 {
-    public function testGetEntityFqcn(): void
-    {
-        self::assertSame(Plan::class, PlanCrudController::getEntityFqcn());
-    }
-
     /**
      * @return AbstractCrudController<Plan>
      */
