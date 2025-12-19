@@ -15,7 +15,7 @@ use Tourze\SubscriptionBundle\Entity\Resource;
 use Tourze\SubscriptionBundle\Entity\Usage;
 
 #[Autoconfigure(public: true)]
-readonly class AdminMenu implements MenuProviderInterface
+readonly final class AdminMenu implements MenuProviderInterface
 {
     public function __construct(private LinkGeneratorInterface $linkGenerator)
     {

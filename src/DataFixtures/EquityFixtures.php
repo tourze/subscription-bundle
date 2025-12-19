@@ -10,7 +10,7 @@ use Tourze\SubscriptionBundle\Entity\Equity;
 
 #[When(env: 'test')]
 #[When(env: 'dev')]
-class EquityFixtures extends Fixture implements FixtureGroupInterface
+final class EquityFixtures extends Fixture implements FixtureGroupInterface
 {
     public const EQUITY_LOTTERY = 'equity-lottery';
     public const EQUITY_TRAFFIC = 'equity-traffic';

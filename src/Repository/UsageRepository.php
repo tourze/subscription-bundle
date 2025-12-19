@@ -11,7 +11,7 @@ use Tourze\SubscriptionBundle\Entity\Usage;
  * @extends ServiceEntityRepository<Usage>
  */
 #[AsRepository(entityClass: Usage::class)]
-class UsageRepository extends ServiceEntityRepository
+final class UsageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

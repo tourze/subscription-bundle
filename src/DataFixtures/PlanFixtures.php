@@ -12,7 +12,7 @@ use Tourze\SubscriptionBundle\Entity\Plan;
 
 #[When(env: 'test')]
 #[When(env: 'dev')]
-class PlanFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
+final class PlanFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public const PLAN_BASIC = 'plan-basic';
     public const PLAN_PREMIUM = 'plan-premium';

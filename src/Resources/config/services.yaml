@@ -3,16 +3,12 @@ services:
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: false
 
-  # Repository 服务（使用 #[AsRepository] 属性自动配置）
+  Tourze\SubscriptionBundle\Controller\:
+    resource: '../../Controller/'
   Tourze\SubscriptionBundle\Repository\:
     resource: '../../Repository/'
-
-  # Controller 服务（EasyAdmin CRUD控制器）
-  Tourze\SubscriptionBundle\Controller\Admin\:
-    resource: '../../Controller/Admin/'
-    tags: ['controller.service_arguments']
-
-  # Service 服务（AdminMenu等）
   Tourze\SubscriptionBundle\Service\:
     resource: '../../Service/'
+    public: true

@@ -4,7 +4,7 @@ namespace Tourze\SubscriptionBundle\DependencyInjection;
 
 use Tourze\SymfonyDependencyServiceLoader\AutoExtension;
 
-class SubscriptionExtension extends AutoExtension
+final class SubscriptionExtension extends AutoExtension
 {
     protected function getConfigDir(): string
     {

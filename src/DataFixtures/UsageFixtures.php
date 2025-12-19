@@ -8,20 +8,21 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\Attribute\When;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\SubscriptionBundle\Entity\Equity;
 use Tourze\SubscriptionBundle\Entity\Record;
 use Tourze\SubscriptionBundle\Entity\Usage;
+use Tourze\SubscriptionBundle\Tests\Fixtures\TestUser;
 
-#[When(env: 'test')]
 #[When(env: 'dev')]
-class UsageFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
+final class UsageFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public const USAGE_LOTTERY_TODAY = 'usage-lottery-today';
     public const USAGE_TRAFFIC_TODAY = 'usage-traffic-today';
 
     public static function getGroups(): array
     {
-        return ['subscription', 'test'];
+        return ['subscription'];
     }
 
     public function getDependencies(): array
@@ -37,7 +38,17 @@ class UsageFixtures extends Fixture implements DependentFixtureInterface, Fixtur
         // 获取引用的实体
         $equity = $this->getReference(EquityFixtures::EQUITY_LOTTERY, Equity::class);
         $record = $this->getReference(RecordFixtures::RECORD_BASIC, Record::class);
-        $user = $this->getReference(RecordFixtures::TEST_USER, BizUser::class);
+
+        // 获取用户引用，可能不存在
+        $user = null;
+        if ($this->hasReference(RecordFixtures::TEST_USER, UserInterface::class)) {
+            $user = $this->getReference(RecordFixtures::TEST_USER, UserInterface::class);
+        }
+
+        // 如果没有用户引用，创建测试用户
+        if ($user === null) {
+            $user = new TestUser(1, 'test_user_for_subscription', 'test@subscription.com');
+        }
 
         // 创建第一个 Usage (今日抽奖次数)
         $usage1 = new Usage();

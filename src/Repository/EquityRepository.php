@@ -11,7 +11,7 @@ use Tourze\SubscriptionBundle\Entity\Equity;
  * @extends ServiceEntityRepository<Equity>
  */
 #[AsRepository(entityClass: Equity::class)]
-class EquityRepository extends ServiceEntityRepository
+final class EquityRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
